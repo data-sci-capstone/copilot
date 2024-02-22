@@ -1,0 +1,70 @@
+body {
+    box-sizing: border-box;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: monospace;
+}
+
+button {
+    cursor: pointer;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #090970;
+    border-radius: 0px 0px 20px 20px;
+}
+
+.header-welcome {
+    font-size: 38px;
+    margin: 20px 0px 5px 0px;
+    color: #FFD700;
+}
+
+.header-copilot {
+    font-size: 100px;
+    margin: 5px 0px 10px 0px;
+    color: white;
+}
+
+.ai-img {
+    width: 400px;
+    height: 300px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+}
+
+.explore-btn {
+    width: 20%;
+    height: 50px;
+    border-radius: 30px;
+    font-size: large;
+    margin: 5px 0px 25px 0px;
+    background-color: #090970;
+    color: #FFD700;
+    border: #FFD700;
+    border-style: solid;
+}
+
+.container-btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+}
+
+.about-our-project, .who-we-are, .contact-us {
+    width: 10%;
+    height: 50%;
+    border-radius: 50px;
+    font-size: x-large;
+    background-color: #090970;
+    color: #FFD700;
+    border: #FFD700;
+    border-style: solid;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
