@@ -16,7 +16,6 @@ useful datasets that we might be able to use for sentiment analysis:
 9. https://nlp.stanford.edu/sentiment/index.html
 10. https://huggingface.co/datasets/imdb
 
-
 useful datasets for summarization:
 
 1. https://huggingface.co/datasets/scientific_papers
@@ -26,6 +25,9 @@ useful datasets for summarization:
 5. https://huggingface.co/datasets/lytang/MeetingBank-transcript?row=0
 6. https://huggingface.co/datasets/ccdv/cnn_dailymail
 7. https://huggingface.co/datasets/multi_news
+
+Datasets for NLP in general:
+1. https://ics.uci.edu/~smyth/courses/cs175/text_data_sets.html
    
 Last two links could be very useful! 
 
