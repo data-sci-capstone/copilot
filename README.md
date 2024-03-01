@@ -25,11 +25,11 @@ useful datasets for summarization:
 5. https://huggingface.co/datasets/lytang/MeetingBank-transcript?row=0
 6. https://huggingface.co/datasets/ccdv/cnn_dailymail
 7. https://huggingface.co/datasets/multi_news
+   
+Last two links could be very useful! 
 
 Datasets for NLP in general:
 1. https://ics.uci.edu/~smyth/courses/cs175/text_data_sets.html
-   
-Last two links could be very useful! 
 
 side note: 
 
