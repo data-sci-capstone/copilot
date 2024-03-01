@@ -1,0 +1,76 @@
+body {
+    box-sizing: border-box;
+    margin: 0;
+    height: 100vh;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: auto;
+    width: 100%;
+    background-color: #1F2960;
+}
+
+.heading {
+    color: white;
+    font-size: 48px;
+
+}
+
+.header-links {
+    display: flex;
+    justify-content: space-evenly;
+    font-size: x-large;
+    width: 15%;
+}
+
+a {
+    color: #FFD700;
+    text-decoration: wavy;
+}
+
+.details-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e5e7eb;
+    height: 80%;
+    width: 90%;
+}
+
+.details-header {
+    font-size: 48px;
+    font-weight: bolder;
+}
+
+.heading-text {
+    font-size: x-large;
+    font-style: italic;
+}
+
+.inner-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+}
+
+.inner-inner-container1, .inner-inner-container2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.mission-header, .challenges-header {
+    font-size: xx-large;
+    font-weight: bolder;
+}
