@@ -23,8 +23,9 @@ useful datasets for summarization:
 2. https://huggingface.co/datasets/ccdv/pubmed-summarization
 3. https://huggingface.co/datasets/pubmed_qa 
 4. https://huggingface.co/datasets/databricks/databricks-dolly-15k?row=9
-5. https://huggingface.co/datasets/ccdv/cnn_dailymail
-6. https://huggingface.co/datasets/multi_news
+5. https://huggingface.co/datasets/lytang/MeetingBank-transcript?row=0
+6. https://huggingface.co/datasets/ccdv/cnn_dailymail
+7. https://huggingface.co/datasets/multi_news
    
 Last two links could be very useful! 
 
