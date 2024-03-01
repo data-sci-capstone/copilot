@@ -21,7 +21,6 @@ body {
 .heading {
     color: white;
     font-size: 48px;
-
 }
 
 .header-links {
@@ -39,21 +38,33 @@ a {
 .details-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
     background-color: #e5e7eb;
     height: 80%;
     width: 90%;
+    border-radius: 20px;
+}
+
+.heading-details-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px;
 }
 
 .details-header {
     font-size: 48px;
     font-weight: bolder;
+    align-self: center;
 }
 
 .heading-text {
     font-size: x-large;
     font-style: italic;
+    justify-content: center;
+    align-self: center;
+    max-width: 50%;
 }
 
 .inner-container {
@@ -61,6 +72,7 @@ a {
     justify-content: space-between;
     align-items: center;
     width: 50%;
+    margin: 20px;
 }
 
 .inner-inner-container1, .inner-inner-container2 {
@@ -71,6 +83,11 @@ a {
 }
 
 .mission-header, .challenges-header {
-    font-size: xx-large;
+    font-size: 40px;
     font-weight: bolder;
 }
+
+.challenges-text, .mission-text {
+    font-size: large;
+}
+
