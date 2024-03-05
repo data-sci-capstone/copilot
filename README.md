@@ -16,7 +16,6 @@ useful datasets that we might be able to use for sentiment analysis:
 9. https://nlp.stanford.edu/sentiment/index.html
 10. https://huggingface.co/datasets/imdb
 
-
 useful datasets for summarization:
 
 1. https://huggingface.co/datasets/scientific_papers
@@ -32,3 +31,7 @@ Last two links could be very useful!
 side note: 
 
 https://www.kaggle.com/code/vshantam/text-summarization-extractive-bleu might be useful for understanding summarization. 
+
+vish suggested data:
+
+https://ca.talkbank.org/access/CallHome/p
