@@ -1,15 +1,78 @@
 body {
     box-sizing: border-box;
     margin: 0;
-    height: 100vh;
-    font-family: monospace;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    font-family: monospace;
+    overflow: hidden;
+    background-color: #fdfefe;
+}
+
+nav {
+    background-color: #d7eef2;
+}
+
+.logo {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 5%;
+}
+
+.nav-container {
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+    color: #1111;
+    font-weight: 100;
+    font-size: x-large;
+}
+
+.nav-links {
+    display: flex;
+}
+
+a {
+    color: #111111;
+    text-decoration: wavy;
+    margin: 10px;
+}
+
+.google-drive {
+    background-color: #111111;
+    color: #fdfefe;
+    padding: 10px;
+}
+
+.context-container {
+    display: flex;
+    flex-direction: column;
     align-items: center;
 }
 
-.header-container {
+.context-heading {
+    font-size: 56px;
+}
+
+p {
+    font-size: 36px;
+}
+
+.columns-container {
+    display: flex;
+    justify-content: space-around;
+    background-color: #d7eef2;
+}
+
+.challenges, .mission {
+    font-size: 56px;
+}
+
+li {
+    font-size: 26px;
+}
+/* .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -90,4 +153,4 @@ a {
 .challenges-text, .mission-text {
     font-size: large;
 }
-
+ */
