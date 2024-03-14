@@ -7,64 +7,72 @@ body {
     font-family: monospace;
 }
 
-button {
-    cursor: pointer;
+nav {
+    background-color: #d7eef2;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #1F2960;
-    border-radius: 0px 0px 20px 20px;
-}
-
-.header-welcome {
-    font-size: 38px;
-    margin: 20px 0px 5px 0px;
-    color: #FFD700;
-}
-
-.header-copilot {
-    font-size: 100px;
-    margin: 5px 0px 10px 0px;
-    color: white;
-}
-
-.ai-img {
-    width: 400px;
-    height: 300px;
-    margin-bottom: 20px;
-    border-radius: 15px;
-}
-
-.explore-btn {
-    width: 20%;
-    height: 50px;
-    border-radius: 30px;
-    font-size: large;
-    margin: 5px 0px 25px 0px;
-    background-color: #1F2960;
-    color: #FFD700;
-    border: #FFD700;
-    border-style: solid;
-}
-
-.container-btns {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+.logo {
+    margin: 0;
+    padding: 0;
     height: 100%;
+    width: 5%;
 }
 
-.about-our-project, .who-we-are, .contact-us {
-    width: 10%;
-    height: 50%;
-    border-radius: 50px;
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #1111;
+    font-weight: 100;
     font-size: x-large;
-    background-color: #1F2960;
-    color: #FFD700;
-    border: #FFD700;
-    border-style: solid;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.nav-links {
+    display: flex;
+}
+
+a {
+    color: #111111;
+    text-decoration: wavy;
+    margin: 10px;
+}
+
+.google-drive {
+    background-color: #111111;
+    color: #fdfefe;
+    padding: 10px;
+}
+
+.main-container {
+    position: relative;
+    text-align: center;
+    height: 90%;
+
+}
+
+.main-page-photo {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 96px;
+    font-weight: 100px;
+}
+
+.demo {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10%;
+    height: 8%;
+    font-size: 48px;
+    background-color: #d7eef2;
+    cursor: pointer;
 }
