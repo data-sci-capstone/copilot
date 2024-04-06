@@ -4,7 +4,7 @@ USE copilot-db;
 
 -- Dialogues Table
 CREATE TABLE IF NOT EXISTS dialogues (
-    dialogue_id SERIAL PRIMARY KEY, -- auto increments the id 
+    dialogue_id SERIAL PRIMARY KEY, -- "serial" auto increments the id 
     dialogue_set VARCHAR(3) NOT NULL,
     dialogue_text TEXT NOT NULL,
     actual_summary TEXT NOT NULL,
@@ -39,6 +39,5 @@ CREATE TABLE IF NOT EXISTS sentiments (
 CREATE TABLE IF NOT EXISTS sentiment_evaluation (
     evaluation_id SERIAL PRIMARY KEY,
     model_id INTEGER REFERENCES models(model_id),
-    model_name VARCHAR(50),
     roc_score DECIMAL
 );
