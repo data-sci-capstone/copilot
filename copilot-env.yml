@@ -1,6 +1,5 @@
 name: copilot-env
 channels:
-  - conda-forge
   - pytorch
   - defaults
 dependencies:
