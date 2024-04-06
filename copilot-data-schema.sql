@@ -1,4 +1,4 @@
-CREATE DATABASE copilot-db;
+CREATE DATABASE IF NOT EXISTS copilot-db;
 
 USE copilot-db;
 
