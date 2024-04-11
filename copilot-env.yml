@@ -1,13 +1,10 @@
 name: copilot-env
 channels:
-  - pytorch
-  - conda-forge
   - defaults
 dependencies:
   - numpy
   - pandas
   - transformers
-  - pytorch
   - sqlalchemy
   - nltk
   - matplotlib
