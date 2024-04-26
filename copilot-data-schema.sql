@@ -5,7 +5,7 @@ USE copilot-db;
 -- Dialogues Table
 CREATE TABLE IF NOT EXISTS dialogues (
     dialogue_id SERIAL PRIMARY KEY, -- "serial" auto increments the id 
-    dialogue_set VARCHAR(3) NOT NULL,
+    data_set VARCHAR(3) NOT NULL,
     dialogue_text TEXT NOT NULL,
     actual_summary TEXT NOT NULL,
     actual_sentiment VARCHAR(8)
@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS dialogues (
 -- Models Table
 CREATE TABLE IF NOT EXISTS models (
     model_id SERIAL PRIMARY KEY,
-    model_name VARCHAR(50) NOT NULL
+    model_name VARCHAR(50) NOT NULL,
+    gpu_usage INTEGER,
+    eval_time INTEGER
 );
 
 -- Summaries Table
@@ -24,7 +26,8 @@ CREATE TABLE IF NOT EXISTS summaries (
     model_id INTEGER REFERENCES models(model_id),
     generated_summary TEXT,
     rouge_score DECIMAL,
-    meteor_score DECIMAL
+    meteor_score DECIMAL,
+    bert_score DECIMAL
 );
 
 -- Sentiments Table
