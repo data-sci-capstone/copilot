@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Demo: CoPilot</title>
+        <link rel="stylesheet" href="../static/css/demo.css">
+    </head>
+
+
+    <body>
+        <nav>       
+            <div class = "nav-container">
+                <img class = "logo" src="../static/images/logo.png">
+                <div class = "nav-links">
+                    <a href = "./about-copilot.html">|Explore Copilot| </a>
+                    <a href = "./about-us.html">|Who We Are| </a>
+                    <a href="#">|Our Sponsors| </a>
+                </div>
+                <a href = "https://docs.google.com/presentation/d/1AGTWoXmNCZRKRZk9cD-anoOf9o6GnEkLVeibMjFBvRI/edit#slide=id.p" class = "google-drive">Google Drive</a>
+            </div>
+        </nav>
+
+        <div class = "input-container">
+            <h1>Place your transcript text below:</h1>
+            <div class = "input-inner-container">
+                <form action="/generate_output" id="transcript" method="post">
+                    <textarea type="text" class = "query" name="query" placeholder="Text here..."></textarea>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+
+        <div class = "output-container">
+            <h1 class="header-output">Sentiment of Transcript</h1>
+            <p class="sentiment-result">Generated sentiment</p>
+            <h1 class="header-output">Summarization of Transcript</h1>
+            <p class="summary-result">Generated summary</p>
+        </div>
+
+    </body>
+
+    <script type="text/javascript" src="../static/js/demo.js"></script>
+</html>
