@@ -1,7 +1,7 @@
 # copilot
 CoPilot is an AI assistant to call center associates. 
 
-website url: https://data-sci-capstone.github.io/copilot/web-content/
+website url: https://data-sci-capstone.github.io/copilot/web-content/templates/
 
 useful datasets that we might be able to use for sentiment analysis: 
 
