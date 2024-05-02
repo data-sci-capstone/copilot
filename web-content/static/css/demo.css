@@ -89,3 +89,8 @@ form {
 .header-output {
     text-decoration: underline;
 }
+
+.summary-result {
+    text-align: center;
+    width: 50%;
+}

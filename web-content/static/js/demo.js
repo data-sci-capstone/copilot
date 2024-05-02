@@ -13,7 +13,12 @@ function handleResponse(event) {
 
 function generate_content(data) {
     console.log(data)
+    let sentimentComponent = document.querySelector('.sentiment-result')
+    sentimentComponent.textContent = data['sentiment']
+    console.log(sentimentComponent.textContent)
 
+    let summaryComponent = document.querySelector('.summary-result')
+    summaryComponent.textContent = data["summary"]
 };
 
 
