@@ -5,8 +5,9 @@ import json
 
 app = Flask(__name__)
 
-repo_id = "mistralai/Mistral-7B-Instruct-v0.1"
-llm_client = InferenceClient(model=repo_id,timeout=120)
+REPO_ID: str = "mistralai/Mistral-7B-Instruct-v0.1"
+LLM_CLIENT: InferenceClient = InferenceClient(model=REPO_ID,timeout=120)
+MAX_DIALOGUE_LENGTH: int = 1024
 
 @app.route("/")
 def demo():
@@ -15,69 +16,102 @@ def demo():
 @app.route("/generate_output", methods=['POST'])
 
 
-def generate_output():
+def generate_output() -> json:
     data: dict = request.get_json()
     dialogue: str = data['response']
-    response: json = {"sentiment" : generate_sentiment(llm_client, dialogue),
-                      "summary": generate_summary(llm_client, dialogue)}
+
+    prompt_sentiment: str = "Given the following dialogue, output a single digit representing the sentiment: " \
+                  "-1 for negative, 0 for neutral, and 1 for positive. Do not provide any additional " \
+                  " text or explanation.\n\n{}\n\nSentiment:".format(dialogue)
+    
+    prompt_summary: str = "Provide a brief summary of the following text:.\n\n{}\n\nSummarization:".format(dialogue)
+
+    response: json = {"sentiment" : generate_sentiment(LLM_CLIENT, prompt_sentiment),
+                      "summary": generate_summary(LLM_CLIENT, prompt_summary)}
     return jsonify(response)
 
 """
 Generates the sentiment of the text
 """
-def generate_sentiment(inference_client: InferenceClient, dialogue: str):
-    prompt: str = "Given the following dialogue, output a single digit representing the sentiment: " \
-                  "-1 for negative, 0 for neutral, and 1 for positive. Do not provide any additional " \
-                  " text or explanation.\n\n{}\n\nSentiment:".format(dialogue)
+def generate_sentiment(inference_client: InferenceClient, dialogue: str) -> str:
     
     response = inference_client.post(
         json={
-            "inputs":prompt,
+            "inputs":dialogue,
             "parameters": {"max_new_tokens": 50},
             "task": "text-classification",
         },
     )
+    response = json.loads(response.decode())[0]["generated_text"]
 
-    print(response.decode())
-    sentiment_value = re.search(r'Sentiment: (-?\d)', response.decode())
+    sentiment_value = re.search(r'Sentiment: (-?\d)', response)
 
+    sentiment = {-1:'negative', 0:'neutral', 1: 'positive'}
     if sentiment_value:
-        if int(sentiment_value.group(1)) == -1:
-            sentiment_value = "negative"
-        elif int(sentiment_value.group(1)) == 1:
-            sentiment_value = "positive"
-        else:
-            sentiment_value = "neutral"
+        sentiment_value = int(sentiment_value.group(1))
     else:
-        sentiment_value = "neutral"
+        sentiment_value = 0
 
-    return sentiment_value
+    return sentiment[sentiment_value]
 
 """
 Generates the summary of the text
 """
-def generate_summary(inference_client: InferenceClient, dialogue: str):
-    prompt: str = "Provide a brief summary of the following text:.\n\n{}\n\nSummarization:".format(dialogue)
+def generate_summary(inference_client: InferenceClient, dialogue: str) -> str:
+
+
+    # check if prompt exceed 1024 characters (roughly 256 tokens)
+    if len(dialogue) >= MAX_DIALOGUE_LENGTH:
+        return generate_long_summary(dialogue)
+
     response = inference_client.post(
         json={
-            "inputs":prompt,
+            "inputs":dialogue,
             "parameters": {"max_new_tokens": 1000},
             "task": "summarization",
         },
     )
 
-    summary = re.search(r'Summarization:\s*(.*?)}\]$', response.decode(), re.S)
+    response: str = json.loads(response.decode())[0]["generated_text"]
+    print(f"response:\n{response}")
+
+    summary: str = re.search(r'Summarization:\s*\n\n(.*)', response, re.S)
+
     if summary:
-        summary = summary.group(1).strip()
+        summary: str = summary.group(1).strip()
+        print("Summary:", summary)
     else:
-        summary = "No summary provided."
+        print("No summary found.")
 
-    summary = re.sub(r'\s+', ' ', summary)
-    summary = re.sub(r'"$', '', summary)
-    summary = summary.replace('"', '')
-    summary = summary.replace('\\n', '')
-    return summary
+    return "" if summary == None else summary
 
+"""
+function dedicated to producing summaries for excessively long dialogues
+"""
+
+def generate_long_summary(prompt: str) -> str:
+    list_of_split_summaries: set = set()
+
+    parts: list = prompt.split('\n')
+    current_part: str = ''
+
+    for part in parts:
+
+        if len(current_part) + len(part) < MAX_DIALOGUE_LENGTH:
+            current_part += part + '\n'
+        else:
+            if current_part:
+                list_of_split_summaries.add(generate_summary(LLM_CLIENT, current_part))
+                current_part = part + '\n'
+    
+    if current_part:
+        print(f"last current part: {current_part}")
+        list_of_split_summaries.add(generate_summary(LLM_CLIENT, current_part))
+
+    print(f"List of Split Summaries: {list_of_split_summaries}")
+
+
+    return ''.join(list(list_of_split_summaries))
 
 if __name__ == "__main__":
     app.run(debug=True)
