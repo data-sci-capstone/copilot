@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 
 REPO_ID: str = "mistralai/Mistral-7B-Instruct-v0.1"
-LLM_CLIENT: InferenceClient = InferenceClient(model=REPO_ID,timeout=120)
+LLM_CLIENT: InferenceClient = InferenceClient(token="replace_with_your_token_here", model=REPO_ID,timeout=120)
 MAX_DIALOGUE_LENGTH: int = 1024
 
 @app.route("/")
@@ -88,7 +88,6 @@ def generate_summary(inference_client: InferenceClient, dialogue: str) -> str:
 """
 function dedicated to producing summaries for excessively long dialogues
 """
-
 def generate_long_summary(prompt: str) -> str:
     list_of_split_summaries: set = set()
 
