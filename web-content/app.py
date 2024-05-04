@@ -104,13 +104,12 @@ def generate_long_summary(prompt: str) -> str:
                 current_part = part + '\n'
     
     if current_part:
-        print(f"last current part: {current_part}")
         list_of_split_summaries.add(generate_summary(LLM_CLIENT, current_part))
 
-    print(f"List of Split Summaries: {list_of_split_summaries}")
+    long_generated_summary = '\n'.join(list(list_of_split_summaries))
+    print(f"List of Split Summaries: {long_generated_summary}")
 
-
-    return ''.join(list(list_of_split_summaries))
+    return long_generated_summary
 
 if __name__ == "__main__":
     app.run(debug=True)
