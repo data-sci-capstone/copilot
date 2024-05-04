@@ -59,7 +59,6 @@ Generates the summary of the text
 """
 def generate_summary(inference_client: InferenceClient, dialogue: str) -> str:
 
-
     # check if prompt exceed 1024 characters (roughly 256 tokens)
     if len(dialogue) >= MAX_DIALOGUE_LENGTH:
         return generate_long_summary(dialogue)
