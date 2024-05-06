@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS sentiments (
     model_id VARCHAR(50) REFERENCES models(model_id),
     generated_sentiment VARCHAR(8),
     gpu_sentiment_usage DECIMAL,
-    memory_sentiment_usage_ DECIMAL,
+    memory_sentiment_usage DECIMAL,
     time_sentiment_taken DECIMAL
 );
 
