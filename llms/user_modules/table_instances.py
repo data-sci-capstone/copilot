@@ -13,7 +13,7 @@ class Models(Base):
 class Dialogues(Base):
     __tablename__ = "dialogues"
     dialogue_id = Column(Integer, primary_key=True)
-    data_set = Column(String(10), nullable=False)
+    dataset = Column(String(10), nullable=False)
     dialogue_text = Column(Text, nullable=False)
     actual_summary = Column(Text, nullable=False)
     actual_sentiment = Column(String(8), nullable=True)

@@ -3,6 +3,8 @@ CoPilot is an AI assistant to call center associates.
 
 website url: https://data-sci-capstone.github.io/copilot/web-content/templates/
 
+Run the demo: https://copilot-ecdfb807803e.herokuapp.com/
+
 useful datasets that we might be able to use for sentiment analysis: 
 
 1. https://www.kaggle.com/datasets/yasserh/imdb-movie-ratings-sentiment-analysis
