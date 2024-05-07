@@ -4,11 +4,15 @@ from user_modules.table_instances import Base
 import pandas as pd
 
 # Setup database connection
-engine = create_engine('postgresql+psycopg2://postgres:mypassword@copilot.craoqkiqslyh.us-east-2.rds.amazonaws.com:5432/copilot-db', echo=True)
+engine = create_engine('postgresql+psycopg2://postgres:mypassword@copilot.craoqkiqslyh.us-east-2.rds.amazonaws.com:5432/copilot-db')
 Session = sessionmaker(bind=engine)
 
 def get_data(dataset: str)->pd.DataFrame:
     data = pd.read_sql(f"SELECT * FROM dialogues WHERE dataset = '{dataset.lower()}';", engine)
+    return data
+
+def get_training_data()->pd.DataFrame:
+    data = pd.read_sql(f"SELECT * FROM dialogues WHERE dataset = 'training';", engine)
     return data
 
 def get_validation_data()->pd.DataFrame:
@@ -18,6 +22,7 @@ def get_validation_data()->pd.DataFrame:
 def get_test_data()->pd.DataFrame:
     test = pd.read_csv("SELECT * FROM dialogues WHERE dataset = 'test';", engine)
     return test
+
 
 def add_models_data(df: pd.DataFrame) -> None:
 

@@ -5,8 +5,6 @@ import re
 import nltk
 from rouge import Rouge
 from nltk.translate.meteor_score import meteor_score
-nltk.download('punkt')
-nltk.download('wordnet')
 from bert_score import score
 from nltk.tokenize import word_tokenize
 from user_modules.table_instances import Models, Summaries, Sentiments, Dialogues, SentimentEvaluation
@@ -27,7 +25,7 @@ model = None
 tokenizer = None
 sentiment_label = {-1:'negative', 0:'neutral', 1: 'positive'}
 
-def generate_sentiment(row: pd.Series, model_id: str) -> pd.Series:
+def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
 
     # extract dialogue from row and place into prompt.
     dialogue = row['dialogue_text']
@@ -46,29 +44,42 @@ def generate_sentiment(row: pd.Series, model_id: str) -> pd.Series:
     input_ids = tokenizer.encode(prompt, return_tensors='pt', add_special_tokens=True).to(device)
 
     # Record GPU before processing
-    gpu_before = GPUtil.getGPUs()[0]
-    row['gpu_before'] = GPUtil.getGPUs()[0]
-    row['load_before'] = gpu_before.load
-    row['mem_before'] = gpu_before.memoryUsed
-    row['start_time'] = time.time()
+    initial_gpu_stats = GPUtil.getGPUs()[0]
+    gpu_before = initial_gpu_stats.load
+    mem_before = initial_gpu_stats.memoryUsed
+    start_time = time.time()
 
     # Generate output from the model
     generated_ids = model.generate(input_ids, max_new_tokens=100, do_sample=True)
 
     # Decode the generated ids to text
-    decoded_output = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
+    decoded_output = str(tokenizer.decode(generated_ids[0], skip_special_tokens=True))
+    row["generated_sentiment"] = str(decoded_output)
 
-    # Use regular expression to extract the sentiment value
-    sentiment_match = re.search(r'Sentiment: (-?\d)', decoded_output)
-    sentiment_value = int(sentiment_value.group(1)) if sentiment_match else 0
-    row['generated_sentiment'] = sentiment_label[int(sentiment_value)]
+    # # Use regular expression to extract the sentiment value
+    # sentiment_match = re.search(r'Sentiment: (-?\d)', decoded_output)
+    # sentiment_value =  if sentiment_match else 0
+    # row['generated_sentiment'] = sentiment_label[int(sentiment_value)]
 
     # Record GPU after processing
-    row['gpu_after'] = GPUtil.getGPUs()[0]
-    row['load_after'] = gpu_after.load
-    row['mem_after'] = gpu_after.memoryUsed
-    row['end_time'] = time.time()
+    gpu_after = GPUtil.getGPUs()[0]
+    row['gpu_sentiment_usage'] = gpu_after.load - gpu_before
+    row['memory_sentiment_usage'] = gpu_after.memoryUsed
+    row['time_sentiment_taken'] = time.time() - start_time
 
+    return row
+
+"""
+labels the sentiment of the llm output. 
+"""
+def label_sentiment(row: pd.Series)->pd.Series:
+    sentiment_value = row["generated_sentiment"]
+    if sentiment_value not in {'-1', '0', '1'}:
+        sentiment_value = 0
+    else:
+        sentiment_value = int(sentiment_value)
+
+    row["generated_sentiment"] = sentiment_label[sentiment_value]
     return row
 
 def generate_summary(df: pd.DataFrame, prompt: str, model: str) ->pd.DataFrame:
