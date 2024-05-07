@@ -34,7 +34,7 @@ def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
             " text or explanation.\n\n{}\n\nSentiment:".format(dialogue)
 
     # load model and avoids reloading the model for each row
-    global tokenizer, model
+    global tokenizer, model, initial_memory_usage
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if model is None or tokenizer is None:
         model = AutoModelForCausalLM.from_pretrained(model_id).to(device)
@@ -43,10 +43,11 @@ def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
     # Encode the prompt to tensor
     input_ids = tokenizer.encode(prompt, return_tensors='pt', add_special_tokens=True).to(device)
 
-    # Record GPU before processing
-    initial_gpu_stats = GPUtil.getGPUs()[0]
-    gpu_before = initial_gpu_stats.load
-    mem_before = initial_gpu_stats.memoryUsed
+    # Record initial memory usage
+    torch.cuda.reset_peak_memory_stats(device)
+    if initial_memory_usage is None:
+        initial_memory_usage = torch.cuda.max_memory_allocated(device) / (1024 ** 2)
+
     start_time = time.time()
 
     # Generate output from the model
@@ -62,9 +63,7 @@ def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
     # row['generated_sentiment'] = sentiment_label[int(sentiment_value)]
 
     # Record GPU after processing
-    gpu_after = GPUtil.getGPUs()[0]
-    row['gpu_sentiment_usage'] = gpu_after.load - gpu_before
-    row['memory_sentiment_usage'] = gpu_after.memoryUsed
+    row['memory_sentiment_usage'] = torch.cuda.max_memory_allocated(device) / (1024 ** 2)
     row['time_sentiment_taken'] = time.time() - start_time
 
     return row
