@@ -39,7 +39,7 @@ def generate_t5xxl_sentiment(row: pd.Series) -> pd.Series:
     decoded_output = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
     row["decoded_output"] = str(decoded_output)
 
-    row = sentiment_label(row)
+    row = label_sentiment(row)
     return row
 
 
@@ -47,7 +47,7 @@ xxl_data = dialogue_data.apply(generate_t5xxl_sentiment, axis = 1)
 xxl_data.to_csv('flant5xxl.csv')
 
 session = Session()
-for index, row in xxl_dialogue_data.iterrows():
+for index, row in xxl_data.iterrows():
     dialogue = session.query(Dialogues).filter(Dialogues.dialogue_id == row["dialogue_id"]).first()
 
     if dialogue:
