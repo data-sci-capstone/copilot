@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from user_modules.table_instances import Base
+from table_instances import Base
 import pandas as pd
 
 # Setup database connection
@@ -22,6 +22,11 @@ def get_validation_data()->pd.DataFrame:
 def get_test_data()->pd.DataFrame:
     test = pd.read_csv("SELECT * FROM dialogues WHERE dataset = 'test';", engine)
     return test
+
+def get_model_sentiment_data(model_id: str)->pd.DataFrame:
+    model_data = pd.read_sql(f"SELECT * FROM sentiments WHERE model_id = '{model_id.lower()}';", engine)
+    return model_data
+
 
 
 def add_models_data(df: pd.DataFrame) -> None:

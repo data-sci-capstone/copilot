@@ -7,8 +7,8 @@ from rouge import Rouge
 from nltk.translate.meteor_score import meteor_score
 from bert_score import score
 from nltk.tokenize import word_tokenize
-from user_modules.table_instances import Models, Summaries, Sentiments, Dialogues, SentimentEvaluation
-from user_modules.db import Session, engine
+from table_instances import Models, Summaries, Sentiments, Dialogues, SentimentEvaluation
+from db import Session, engine
 
 # import model module files
 import torch
@@ -23,6 +23,7 @@ import logging
 # Global Variables
 model = None
 tokenizer = None
+initial_memory_usage = None
 sentiment_label = {-1:'negative', 0:'neutral', 1: 'positive'}
 
 def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
@@ -43,7 +44,7 @@ def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
     # Encode the prompt to tensor
     input_ids = tokenizer.encode(prompt, return_tensors='pt', add_special_tokens=True).to(device)
 
-    # Record initial memory usage
+    # Record GPU before processing
     torch.cuda.reset_peak_memory_stats(device)
     if initial_memory_usage is None:
         initial_memory_usage = torch.cuda.max_memory_allocated(device) / (1024 ** 2)
@@ -51,14 +52,18 @@ def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
     start_time = time.time()
 
     # Generate output from the model
-    generated_ids = model.generate(input_ids, max_new_tokens=100, do_sample=True)
+    generated_ids = model.generate(input_ids, max_new_tokens=100, do_sample=False)
 
     # Decode the generated ids to text
-    decoded_output = str(tokenizer.decode(generated_ids[0], skip_special_tokens=True))
-    row["generated_sentiment"] = str(decoded_output)
+    decoded_output = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
 
     # # Use regular expression to extract the sentiment value
-    # sentiment_match = re.search(r'Sentiment: (-?\d)', decoded_output)
+    sentiment_match = re.search(r'Sentiment:\D*(-?\d)', decoded_output)
+    if sentiment_match:
+        sentiment_match = int(sentiment_match.group(1))
+    else:
+        sentiment_match = 0  # Default to neutral if no valid number is found
+    row["generated_sentiment"] = sentiment_match
     # sentiment_value =  if sentiment_match else 0
     # row['generated_sentiment'] = sentiment_label[int(sentiment_value)]
 
