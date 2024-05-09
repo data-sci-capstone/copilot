@@ -90,7 +90,7 @@ def column_error(df_cols: list, table_name: str) -> bool:
             'memory_sentiment_usage', 'time_sentiment_taken'
             },
         'sentiment_evaluation': {
-            'model_id', 'roc_score'
+            'model_id', 'accuracy', 'f1_score'
             }
     }
 

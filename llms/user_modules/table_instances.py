@@ -49,4 +49,5 @@ class SentimentEvaluation(Base):
     __tablename__ = "sentiment_evaluation"
     evaluation_id = Column(Integer, primary_key = True)
     model_id = Column(String(50), ForeignKey('models.model_id'))
-    roc_score = Column(DECIMAL)
+    accuracy = Column(DECIMAL)
+    f1_score = Column(DECIMAL)
