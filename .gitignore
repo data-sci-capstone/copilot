@@ -1,3 +1,4 @@
-test.csv
+test.*
 logs/
 .env
+test_summary.py

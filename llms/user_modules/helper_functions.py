@@ -43,7 +43,7 @@ def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
     # Encode the prompt to tensor
     input_ids = tokenizer.encode(prompt, return_tensors='pt', add_special_tokens=True).to(device)
 
-    # Record GPU before processing
+    # Record initial memory usage
     torch.cuda.reset_peak_memory_stats(device)
     if initial_memory_usage is None:
         initial_memory_usage = torch.cuda.max_memory_allocated(device) / (1024 ** 2)
