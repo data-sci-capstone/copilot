@@ -7,8 +7,8 @@ from rouge import Rouge
 from nltk.translate.meteor_score import meteor_score
 from bert_score import score
 from nltk.tokenize import word_tokenize
-from user_modules.table_instances import Models, Summaries, Sentiments, Dialogues, SentimentEvaluation
-from user_modules.db import Session, engine
+from table_instances import Models, Summaries, Sentiments, Dialogues, SentimentEvaluation
+from db import Session, engine
 
 # import model module files
 import torch
@@ -23,13 +23,13 @@ import logging
 # Global Variables
 model = None
 tokenizer = None
-sentiment_label = {-1:'negative', 0:'neutral', 1: 'positive'}
+initial_memory_usage = None
 
 def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
 
     # extract dialogue from row and place into prompt.
     dialogue = row['dialogue_text']
-    prompt = "Given the following dialogue, output a single digit representing the sentiment: " \
+    prompt = "Given the following dialogue, output a single digit representing the sentiment label: " \
             "-1 for negative, 0 for neutral, and 1 for positive. Do not provide any additional " \
             " text or explanation.\n\n{}\n\nSentiment:".format(dialogue)
 
@@ -43,7 +43,7 @@ def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
     # Encode the prompt to tensor
     input_ids = tokenizer.encode(prompt, return_tensors='pt', add_special_tokens=True).to(device)
 
-    # Record initial memory usage
+    # Record GPU before processing
     torch.cuda.reset_peak_memory_stats(device)
     if initial_memory_usage is None:
         initial_memory_usage = torch.cuda.max_memory_allocated(device) / (1024 ** 2)
@@ -51,16 +51,12 @@ def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
     start_time = time.time()
 
     # Generate output from the model
-    generated_ids = model.generate(input_ids, max_new_tokens=100, do_sample=True)
+    generated_ids = model.generate(input_ids, max_new_tokens=100, do_sample=False)
 
     # Decode the generated ids to text
-    decoded_output = str(tokenizer.decode(generated_ids[0], skip_special_tokens=True))
-    row["generated_sentiment"] = str(decoded_output)
+    decoded_output = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
 
-    # # Use regular expression to extract the sentiment value
-    # sentiment_match = re.search(r'Sentiment: (-?\d)', decoded_output)
-    # sentiment_value =  if sentiment_match else 0
-    # row['generated_sentiment'] = sentiment_label[int(sentiment_value)]
+    row["generated_sentiment"] = decoded_output
 
     # Record GPU after processing
     row['memory_sentiment_usage'] = torch.cuda.max_memory_allocated(device) / (1024 ** 2)
@@ -68,17 +64,28 @@ def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
 
     return row
 
-"""
-labels the sentiment of the llm output. 
-"""
-def label_sentiment(row: pd.Series)->pd.Series:
-    sentiment_value = row["generated_sentiment"]
-    if sentiment_value not in {'-1', '0', '1'}:
-        sentiment_value = 0
-    else:
-        sentiment_value = int(sentiment_value)
+def find_sentiment(row: pd.Series) -> pd.Series:
+    # # Use regular expression to extract the sentiment value
+    decoded_output = row["generated_sentiment"].lower()
 
-    row["generated_sentiment"] = sentiment_label[sentiment_value]
+    # find first occurence of -1, 0, 1 immediately after "Sentiment:"
+    sentiment_match = re.search(r"sentiment:\s*(1|0|-1)\b", decoded_output)
+
+    sentiment_label = {'-1':'negative', '0':'neutral', '1': 'positive'}
+
+    if sentiment_match:
+        sentiment_value = sentiment_match.group(1)
+        row["generated_sentiment"] = sentiment_label[sentiment_value]
+    else:
+        # if sentiment_match is not found, search for actual labels
+        sentiment_match = re.search(r"sentiment:.*(positive|neutral|negative)", 
+            decoded_output, re.DOTALL)
+        if sentiment_match:
+            row["generated_sentiment"] = str(sentiment_match.group(1))
+
+        else:
+            row["generated_sentiment"] = 'neutral'
+
     return row
 
 def generate_summary(df: pd.DataFrame, prompt: str, model: str) ->pd.DataFrame:

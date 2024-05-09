@@ -31,7 +31,6 @@ class Summaries(Base):
     bert_recall = Column(DECIMAL)
     bert_f1 = Column(DECIMAL)
     meteor = Column(DECIMAL)
-    gpu_summary_usage = Column(DECIMAL)
     memory_summary_usage = Column(DECIMAL)
     time_summary_taken = Column(DECIMAL)
     dialogue = relationship("Dialogues")
@@ -43,7 +42,6 @@ class Sentiments(Base):
     dialogue_id = Column(Integer, ForeignKey('dialogues.dialogue_id'))
     model_id = Column(String(50), ForeignKey('models.model_id'))
     generated_sentiment = Column(String(8))
-    gpu_sentiment_usage = Column(DECIMAL)
     memory_sentiment_usage = Column(DECIMAL)
     time_sentiment_taken = Column(DECIMAL)
 

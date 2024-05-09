@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from user_modules.table_instances import Base
+from table_instances import Base, Sentiments, Summaries, Models, SentimentEvaluation, Dialogues
 import pandas as pd
 
 # Setup database connection
@@ -56,7 +56,7 @@ def add_sentiments_data(df: pd.DataFrame) ->None:
     if not column_error(list(df.columns), 'sentiments'):
         session = Session()
         dict_converted_sentiments = df.to_dict(orient='records')
-        session.bulk_insert_mappings(Summaries, dict_converted_sentiments)
+        session.bulk_insert_mappings(Sentiments, dict_converted_sentiments)
         session.commit()
         session.close()
 
@@ -65,7 +65,7 @@ def add_sentiment_evaluation_data(df: pd.DataFrame) -> None:
     if not column_error(list(df.columns), 'sentiment_evaluation'):
         session = Session()
         dict_converted_sentiment_evaluation = df.to_dict(orient='records')
-        session.bulk_insert_mappings(Summaries, 
+        session.bulk_insert_mappings(SentimentEvaluation, 
             dict_converted_sentiment_evaluation)
         session.commit()
         session.close()
@@ -82,13 +82,12 @@ def column_error(df_cols: list, table_name: str) -> bool:
         'summaries': {
             'dialogue_id', 'model_id', 'generated_summary', 'rouge_1', 
             'rouge_2','rouge_l', 'bert_precision', 'bert_recall', 
-            'bert_f1', 'meteor', 'gpu_summary_usage',
-            'memory_summary_usage', 'time_summary_taken'
+            'bert_f1', 'meteor','memory_summary_usage', 
+            'time_summary_taken'
             },
         'sentiments': {
             'dialogue_id', 'model_id', 'generated_sentiment', 
-            'gpu_sentiment_usage','memory_sentiment_usage', 
-            'time_sentiment_taken'
+            'memory_sentiment_usage', 'time_sentiment_taken'
             },
         'sentiment_evaluation': {
             'model_id', 'roc_score'
