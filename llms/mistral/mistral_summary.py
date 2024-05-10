@@ -82,9 +82,9 @@ def generate_summary(model, tokenizer, dialogues, dialogue_ids, batch_size=5, de
 
         batch_results = pd.DataFrame({
             'dialogue_id': dialogue_ids[i:i+batch_size],
-            'Summary': summaries,
-            'Time Taken (s)': [time_per_dialogue] * len(batch),
-            'GPU Usage (MB)': [memory_per_dialogue] * len(batch)
+            'summary': summaries,
+            'time_taken': [time_per_dialogue] * len(batch),
+            'memory_usage': [memory_per_dialogue] * len(batch)
         })
 
         if i == 0:
@@ -123,8 +123,15 @@ df = pd.read_csv(output_file)
 
 order_df = pd.DataFrame(df.drop_duplicates(subset=["dialogue_id"]).drop(columns=["Summary"]).reset_index(drop=True))
 
-order_df.merge(df.groupby('dialogue_id')['Summary'].apply(' '.join), on="dialogue_id").to_csv(output_file, mode='w', header=True, index=False)
+# order_df.merge(df.groupby('dialogue_id')['Summary'].apply(' '.join), on="dialogue_id").to_csv(output_file, mode='w', header=True, index=False)
 
-f = open("./Datasets/mistral_pre_training_memory_usage.txt", "w")
+merged_df = df.groupby('dialogue_id').agg(
+    summary=('summary', ''.join),
+    time_taken=('time_taken', 'sum'),  # Replace 'Time_Column' with your actual column name
+    memory_usage=('memory_usage', 'sum')
+
+).reset_index().to_csv(output_file, mode='w', header=True, index=False)
+
+f = open("./llms/mistral/mistral_pre_training_memory_usage.txt", "w")
 f.write(f"pre_training_memory_usage: {pre_training_memory_usage} MB")
 f.close()
