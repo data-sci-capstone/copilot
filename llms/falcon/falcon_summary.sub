@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#SBATCH --job-name=falcon_summary          ## Name of the job.
+#SBATCH -A CLASS-STATS170_GPU               ## Account to charge 
+#SBATCH -p gpu                              ## Partition name
+#SBATCH --nodes=1                           ## Number of nodes to use
+#SBATCH --ntasks=1                          ## Number of tasks to launch
+#SBATCH -c 10                               ## Number of cores the job needs
+#SBATCH --gres=gpu:A100:1                   ## Assuming you need a GPU
+#SBATCH --mem=100G                          ## Memory needed per node
+#SBATCH --time 05:00:00                     ## time limit
+#SBATCH --error=logs/slurm-%J.err           ## Error log file
+#SBATCH --output=logs/slurm-%J.out          ## Output log file
+
+# Activate environment
+module load miniconda3/4.12.0
+module load cuda/11.7.1
+
+source /opt/apps/miniconda3/4.12.0/etc/profile.d/conda.sh
+conda activate copilot
+
+# Run the Python script
+python /pub/gaog5/copilot/llms/falcon/falcon_summary.py               ## Execute Python script
