@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 session = Session()
 
-orca = pd.read_csv("../../Datasets/deciLM_summary_results.csv")
+orca = pd.read_csv("../../Datasets/orca2_summary_results.csv")
 
 training_data = get_training_data()
 
