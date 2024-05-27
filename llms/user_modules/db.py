@@ -8,7 +8,7 @@ engine = create_engine('postgresql+psycopg2://postgres:mypassword@copilot.craoqk
 Session = sessionmaker(bind=engine)
 
 def get_data(dataset: str)->pd.DataFrame:
-    data = pd.read_sql(f"SELECT * FROM dialogues WHERE dataset = '{dataset.lower()}';", engine)
+    data = pd.read_sql(f"SELECT * FROM dialogues WHERE dataset = '{dataset}';", engine)
     return data
 
 def get_training_data()->pd.DataFrame:
@@ -24,7 +24,7 @@ def get_test_data()->pd.DataFrame:
     return test
 
 def get_model_sentiment_data(model_id: str)->pd.DataFrame:
-    model_data = pd.read_sql(f"SELECT * FROM sentiments WHERE model_id = '{model_id.lower()}';", engine)
+    model_data = pd.read_sql(f"SELECT * FROM sentiments WHERE model_id = '{model_id}';", engine)
     return model_data
 
 def get_mistral_sentiment_data()->pd.DataFrame:
