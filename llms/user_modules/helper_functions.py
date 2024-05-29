@@ -38,7 +38,7 @@ def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if model is None or tokenizer is None:
         model = AutoModelForCausalLM.from_pretrained(model_id).to(device)
-        tokenizer = AutoTokenizer.from_pretrained(model_id)
+        tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side="left")
 
     # Encode the prompt to tensor
     input_ids = tokenizer.encode(prompt, return_tensors='pt', add_special_tokens=True).to(device)
