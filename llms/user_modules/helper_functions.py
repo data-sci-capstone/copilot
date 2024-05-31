@@ -25,20 +25,22 @@ model = None
 tokenizer = None
 initial_memory_usage = None
 
-def generated_decoded_output(row: pd.Series, model_id: str) -> pd.Series:
+# prompt_template: "Given the following dialogue, output a single digit representing the sentiment label: " \
+#             "-1 for negative, 0 for neutral, and 1 for positive. Do not provide any additional " \
+#             " text or explanation.\n\n{}\n\nSentiment:"
+
+def generated_decoded_output(row: pd.Series, model_id: str, prompt_template: str) -> pd.Series:
 
     # extract dialogue from row and place into prompt.
     dialogue = row['dialogue_text']
-    prompt = "Given the following dialogue, output a single digit representing the sentiment label: " \
-            "-1 for negative, 0 for neutral, and 1 for positive. Do not provide any additional " \
-            " text or explanation.\n\n{}\n\nSentiment:".format(dialogue)
+    prompt = prompt_template.format(dialogue)
 
     # load model and avoids reloading the model for each row
     global tokenizer, model, initial_memory_usage
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if model is None or tokenizer is None:
         model = AutoModelForCausalLM.from_pretrained(model_id).to(device)
-        tokenizer = AutoTokenizer.from_pretrained(model_id)
+        tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side="left")
 
     # Encode the prompt to tensor
     input_ids = tokenizer.encode(prompt, return_tensors='pt', add_special_tokens=True).to(device)
