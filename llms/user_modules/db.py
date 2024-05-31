@@ -27,17 +27,9 @@ def get_model_sentiment_data(model_id: str)->pd.DataFrame:
     model_data = pd.read_sql(f"SELECT * FROM sentiments WHERE model_id = '{model_id}';", engine)
     return model_data
 
-def get_mistral_sentiment_data()->pd.DataFrame:
-    mistral_sentiment = pd.read_sql(f"SELECT * FROM sentiments WHERE model_id = 'mistral 7b';", engine)
-    return mistral_sentiment
-
-def get_gemma_sentiment_data()->pd.DataFrame:
-    gemma_sentiment = pd.read_sql(f"SELECT * FROM sentiments WHERE model_id = 'gemma 7b';", engine)
-    return gemma_sentiment
-
-def get_llama3_sentiment_data()->pd.DataFrame:
-    llama3_sentiment = pd.read_sql(f"SELECT * FROM sentiments WHERE model_id = 'llama 3 8b';", engine)
-    return llama3_sentiment
+def get_model_summary_data(model_id: str)->pd.DataFrame:
+    model_data = pd.read_sql(f"SELECT * FROM summaries WHERE model_id = '{model_id}';", engine)
+    return model_data
 
 def add_models_data(df: pd.DataFrame) -> None:
 
