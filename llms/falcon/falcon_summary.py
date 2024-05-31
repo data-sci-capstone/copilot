@@ -41,7 +41,7 @@ def generate_summary(model, tokenizer, dialogues, dialogue_ids, batch_size=5, de
 
     for i in tqdm(range(0, len(dialogues), batch_size), desc="Summarizing Dialogues"):
         batch = dialogues[i:i+batch_size]
-        prompts = [f"Summarize this and generate on the summary::\n{dialogue}\nSummary:" for dialogue in batch]
+        prompts = [f"Summarize this and generate only the summary:\n{dialogue}\nSummary:" for dialogue in batch]
 
         start_time = time.time()
         if device == "cuda":

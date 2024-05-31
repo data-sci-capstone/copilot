@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=llama3_summary          ## Name of the job.
+#SBATCH --job-name=mpt_summary          ## Name of the job.
 #SBATCH -A CLASS-STATS170_GPU               ## Account to charge 
 #SBATCH -p gpu                              ## Partition name
 #SBATCH --nodes=1                           ## Number of nodes to use
@@ -20,4 +20,4 @@ source /opt/apps/miniconda3/4.12.0/etc/profile.d/conda.sh
 conda activate copilot
 
 # Run the Python script
-python /pub/gaog5/copilot/llms/llama3/llama3_summary.py               ## Execute Python script
+python /pub/gaog5/copilot/llms/mpt/mpt_summary.py               ## Execute Python script

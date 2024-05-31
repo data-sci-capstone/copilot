@@ -41,7 +41,7 @@ def generate_summary(model, tokenizer, dialogues, dialogue_ids, batch_size=5, de
 
     for i in tqdm(range(0, len(dialogues), batch_size), desc="Summarizing Dialogues"):
         batch = dialogues[i:i+batch_size]
-        prompts = [f"Summarize this and generate only the summary::\n{dialogue}\nSummary:" for dialogue in batch]
+        prompts = [f"Summarize this and generate on the summary::\n{dialogue}\nSummary:" for dialogue in batch]
 
         start_time = time.time()
         if device == "cuda":
@@ -95,9 +95,9 @@ def generate_summary(model, tokenizer, dialogues, dialogue_ids, batch_size=5, de
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-model_name = "meta-llama/Meta-Llama-3-8B-Instruct"
-model = AutoModelForCausalLM.from_pretrained(model_name).to(device)
-tokenizer = AutoTokenizer.from_pretrained(model_name, padding_side="left")
+model_name = "mosaicml/mpt-7b-instruct"
+model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True)
+tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-neox-20b", padding_side="left")
 
 if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
@@ -108,7 +108,7 @@ engine = create_engine(os.getenv('POSTGRE_DB_URL'))
 dialogues_df = split_long_dialogues(pd.read_sql("SELECT * FROM dialogues WHERE dataset = 'training';", engine).head(25), max_length=1024)
 
 num_dialogues_to_summarize = 99999
-output_file = "./Datasets/llama3_summary_results.csv"
+output_file = "./Datasets/mpt_summary_results.csv"
 output_file = "test.csv"
 batch_size = 25
 
@@ -134,6 +134,6 @@ merged_df = df.groupby('dialogue_id').agg(
 
 # order_df.merge(merged_df, on="dialogue_id").to_csv(output_file, mode='w', header=True, index=False)
 
-f = open("./llms/llama3/llama3_pre_training_memory_usage.txt", "w")
+f = open("./llms/mpt/mpt_pre_training_memory_usage.txt", "w")
 f.write(f"pre_training_memory_usage: {pre_training_memory_usage} MB")
 f.close()

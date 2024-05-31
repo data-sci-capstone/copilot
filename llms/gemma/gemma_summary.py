@@ -51,7 +51,7 @@ def generate_summary(model, tokenizer, dialogues, dialogue_ids, batch_size=5, de
                                  max_length=1024).to(device)
         
         with torch.no_grad():
-            model_outputs = model.generate(**model_inputs, max_new_tokens=200, do_sample=False, 
+            model_outputs = model.generate(**model_inputs, max_new_tokens=120, do_sample=False, 
                                            pad_token_id=tokenizer.eos_token_id)
         
         end_time = time.time()
