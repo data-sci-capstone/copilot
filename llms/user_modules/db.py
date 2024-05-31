@@ -16,11 +16,11 @@ def get_training_data()->pd.DataFrame:
     return data
 
 def get_validation_data()->pd.DataFrame:
-    validation = pd.read_csv("SELECT * FROM dialogues WHERE dataset = 'validation';", engine)
+    validation = pd.read_sql("SELECT * FROM dialogues WHERE dataset = 'validation';", engine)
     return validation
 
 def get_test_data()->pd.DataFrame:
-    test = pd.read_csv("SELECT * FROM dialogues WHERE dataset = 'test';", engine)
+    test = pd.read_sql("SELECT * FROM dialogues WHERE dataset = 'test';", engine)
     return test
 
 def get_model_sentiment_data(model_id: str)->pd.DataFrame:
