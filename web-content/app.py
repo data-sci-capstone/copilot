@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 
 REPO_ID: str = "mistralai/Mistral-7B-Instruct-v0.1"
-LLM_CLIENT: InferenceClient = InferenceClient(token="replace_with_your_token_here", model=REPO_ID,timeout=120)
+LLM_CLIENT: InferenceClient = InferenceClient(token="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", model=REPO_ID,timeout=120)
 MAX_DIALOGUE_LENGTH: int = 1024
 
 @app.route("/")

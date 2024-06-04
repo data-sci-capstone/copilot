@@ -75,7 +75,7 @@ form {
     height: 100%;
     margin: 5px;
     color: gray;
-    font-size: x-large;
+
     display: flex;
 }
 
@@ -84,6 +84,7 @@ form {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
 }
 
 .header-output {
@@ -92,5 +93,12 @@ form {
 
 .summary-result {
     text-align: center;
+    font-size: 28px;
     width: 50%;
+    font-style: italic;
+}
+
+.sentiment-result {
+    font-size: 28px;
+    font-weight: bold;
 }
