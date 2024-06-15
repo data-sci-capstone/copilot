@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import regex as re
 from huggingface_hub import InferenceClient
 import json
@@ -10,8 +10,24 @@ LLM_CLIENT: InferenceClient = InferenceClient(token="hf_cEwBPIejIsHoQYdAEvzrEuNy
 MAX_DIALOGUE_LENGTH: int = 1024
 
 @app.route("/")
+def index():
+    return render_template('index.html')
+
+@app.route("/demo")
 def demo():
-    return open('./templates/demo.html').read()
+    return render_template('demo.html')
+
+@app.route("/")
+def about_us():
+    return render_template('about-us.html')
+
+@app.route("/about-copilot")
+def about_copilot():
+    return render_template('about-copilot.html')
+
+@app.route("/sponsors")
+def sponsors():
+    return render_template('sponsors.html')
 
 @app.route("/generate_output", methods=['POST'])
 
