@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import regex as re
 from huggingface_hub import InferenceClient
 import json
@@ -6,12 +6,28 @@ import json
 app = Flask(__name__)
 
 REPO_ID: str = "mistralai/Mistral-7B-Instruct-v0.1"
-LLM_CLIENT: InferenceClient = InferenceClient(token="replace_with_your_token_here", model=REPO_ID,timeout=120)
+LLM_CLIENT: InferenceClient = InferenceClient(token=HF_TOKEN, model=REPO_ID,timeout=120)
 MAX_DIALOGUE_LENGTH: int = 1024
 
 @app.route("/")
+def index():
+    return render_template('index.html')
+
+@app.route("/demo")
 def demo():
-    return open('./templates/demo.html').read()
+    return render_template('demo.html')
+
+@app.route("/")
+def about_us():
+    return render_template('about-us.html')
+
+@app.route("/about-copilot")
+def about_copilot():
+    return render_template('about-copilot.html')
+
+@app.route("/sponsors")
+def sponsors():
+    return render_template('sponsors.html')
 
 @app.route("/generate_output", methods=['POST'])
 

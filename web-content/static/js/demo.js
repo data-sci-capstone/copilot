@@ -1,4 +1,7 @@
-
+function formatText(text) {
+    // Replace newlines with <br> tags
+    return text.trim().replace(/\n/g, '<br>');
+}
 
 function handleResponse(event) {
     event.preventDefault();
@@ -14,11 +17,12 @@ function handleResponse(event) {
 function generate_content(data) {
     console.log(data)
     let sentimentComponent = document.querySelector('.sentiment-result')
-    sentimentComponent.textContent = data['sentiment']
+    sentimentComponent.textContent = data['sentiment'].charAt(0).toUpperCase() + data['sentiment'].slice(1);
     console.log(sentimentComponent.textContent)
 
     let summaryComponent = document.querySelector('.summary-result')
-    summaryComponent.textContent = data["summary"]
+    console.log(summaryComponent)
+    summaryComponent.innerHTML = formatText(data["summary"])
 };
 
 
